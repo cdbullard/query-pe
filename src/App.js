@@ -207,10 +207,10 @@ function App() {
             <a className="navbar-item" onClick={handleOpenModal}>
               About
             </a>
-            <a className="navbar-item" href="https://github.com/cdbullard/qpe" target="_blank">
+            <a className="navbar-item" href="https://github.com/cdbullard/query-pe" target="_blank">
               Documentation (GitHub)
             </a>
-            <a className="navbar-item" href="https://github.com/cdbullard/qpe/issues/new" target="_blank">
+            <a className="navbar-item" href="https://github.com/cdbullard/query-pe/issues/new" target="_blank">
               Report Issue
             </a>
           </div>
