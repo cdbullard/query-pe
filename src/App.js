@@ -48,6 +48,20 @@ function App() {
     }
   }
 
+  const getBaseUrl = () => {
+    let url;
+    switch(process.env.NODE_ENV) {
+      case "production":
+        url = "https://query-pe.dev";
+        break;
+      case "development":
+      default:
+        url = "";
+    }
+  
+    return url;
+  }
+
   const jsonIterate = (obj) => {
     Object.keys(obj).forEach(key => {
       if (key == "relname") {
@@ -149,7 +163,7 @@ function App() {
 
   const handleParseRequest = async (e) => {
     e.preventDefault();
-    let route = "/parse"
+    let route = getBaseUrl() + "/parse";
     let request = {};
     request.inputQuery = inputQuery;
     request.path = toggle ? 2 : 1;
@@ -163,13 +177,6 @@ function App() {
         let clauseDict = result.dict;
         let outputJson = result.output;
         let responseError = (String(outputJson).includes("Invalid") || String(outputJson).includes("undefined"));
-        console.log("Request: " + request);
-        console.log("Request inputQuery: " + request.inputQuery);
-        console.log("Request path: " + request.path);
-        console.log("JSON Request: " + JSON.stringify(request));
-        console.log(result);
-        console.log(result.message);
-        console.log(result.state);
 
         if (toggle) {
           document.getElementById("resultBox").value = outputJson;
@@ -184,7 +191,7 @@ function App() {
         
         if (responseError) {
           setShowGraph(false);
-          document.getElementById("resultBox").value = result;
+          document.getElementById("resultBox").value = invalidResponse;
         } else {
           // Rebuild Relations and Joins
           allRelations = [];

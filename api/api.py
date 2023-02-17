@@ -18,15 +18,10 @@ def add_cors_header(response):
 
 @app.route('/parse', methods=['GET', 'POST'])
 def parseTree():
-    tempVar = 0
     try:
-        tempVar = 1
         data = json.loads(request.data)
-        tempVar = 2
         parseTree = p.parse_sql_json(data['inputQuery'])
-        tempVar = 3
         dictionaryTree = qp.extractClauseData(parseTree)
-        tempVar = 4
         resObj = {}
         resObj['dict'] = dict(dictionaryTree)
         tempVar = 5
@@ -34,7 +29,6 @@ def parseTree():
         # Path for JSON Tree
         if data['path'] == 1:
             jsonParseTree = json.loads(parseTree)
-            tempVar = 6
             formattedStatement = jsonParseTree['stmts'][0]['stmt']
             resObj['output'] = json.dumps(formattedStatement)
             return jsonify(resObj)
@@ -42,16 +36,10 @@ def parseTree():
         # Path for Parsed Results
         if data['path'] == 2:
             phrases = pg.extractPhrases(dictionaryTree)
-            tempVar = 6
             resObj['output'] = phrases
             return jsonify(resObj)
-    except Exception as e:
-        exceptionRes = {}
-        exceptionRes['state'] = tempVar
-        exceptionRes['message'] = str(e)
-        exceptionRes['req'] = request
-        exceptionRes['reqData'] = request.data
-        return jsonify(str(exceptionRes))
+    except Exception:
+        return jsonify(invalidSQLMessage)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
