@@ -2,7 +2,9 @@
 
 QPE is an application built with the goal of making Structured Query Language (SQL) more accessible and understandable to non-technical or beginning-to-be-technical users.
 
-![QPE Screenshot](./pubilc/qpe-screenshot.png)
+<img src="./public/qpe-screenshot.png" width="60%" height="45%" />
+
+https://query-pe.dev
 
 ## Installation
 

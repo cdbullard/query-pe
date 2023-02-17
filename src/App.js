@@ -96,10 +96,10 @@ function App() {
             }
           });
 
-          let leftTable = allRelations.find(el => el.alias == curJoin.left.alias);
-          let rightTable = allRelations.find(el => el.alias == curJoin.right.alias);
-          leftTable.joined = true;
-          rightTable.joined = true;
+          // let leftTable = allRelations.find(el => el.alias == curJoin.left.alias);
+          // let rightTable = allRelations.find(el => el.alias == curJoin.right.alias);
+          // leftTable.joined = true;
+          // rightTable.joined = true;
         });
       } else if (key == "targets") {
         Object.values(obj[key]).forEach(value => {
