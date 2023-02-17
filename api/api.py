@@ -12,7 +12,7 @@ if __name__ == '__main__':
 
 invalidSQLMessage = "Invalid."
 
-@app.route('/parse', methods=['POST'])
+@app.route('/parse', methods=['GET', 'POST'])
 def parseTree():
     try:
         data = json.loads(request.data)

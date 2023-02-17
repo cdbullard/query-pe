@@ -10,6 +10,7 @@ import 'bulma/css/bulma.css';
 function App() {
   const [inputQuery, setInputQuery] = useState("");
   const [toggle, setToggle] = useState(true);
+  const [disableSubmit, setDisableSubmit] = useState(true);
   const [diagram, setDiagram] = useState(`graph LR\nA-->B; Example;\n\n`);
   const [showGraph, setShowGraph] = useState(false);
   const [showModal, setShowModal] = useState(false);
@@ -36,6 +37,15 @@ function App() {
 
   const handleInputChange = (e) => {
     setInputQuery(e.target.value);
+    handleDisableSubmit();
+  }
+
+  function handleDisableSubmit() {
+    if (document.getElementById("inputQuery").value === "") {
+      setDisableSubmit(true);
+    } else {
+      setDisableSubmit(false);
+    }
   }
 
   const jsonIterate = (obj) => {
@@ -247,8 +257,10 @@ function App() {
                 <div className="field is-pulled-right">
                   <div className="control">
                     <button 
+                      id="submitButton"
                       className="button is-link is-light is-success is-normal"
                       type="submit"
+                      disabled={disableSubmit}
                       onClick={handleParseRequest}>Submit
                     </button>
                   </div>
