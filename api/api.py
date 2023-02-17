@@ -9,9 +9,6 @@ import phraseGenerator as pg
 app = Flask(__name__)
 CORS(app)
 
-if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000)
-
 invalidSQLMessage = "Invalid."
 
 @app.route('/parse', methods=['GET', 'POST'])
@@ -50,5 +47,9 @@ def parseTree():
         exceptionRes = {}
         exceptionRes['state'] = tempVar
         exceptionRes['message'] = str(e)
-        exceptionRes['req'] = request.data
+        exceptionRes['req'] = request
+        exceptionRes['reqData'] = request.data
         return jsonify(str(exceptionRes))
+
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=5000)
