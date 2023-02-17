@@ -163,6 +163,7 @@ function App() {
         let clauseDict = result.dict;
         let outputJson = result.output;
         let responseError = (String(outputJson).includes("Invalid") || String(outputJson).includes("undefined"));
+        document.getElementById("resultBox").value = outputJson;
 
         if (toggle) {
           document.getElementById("resultBox").value = outputJson;
@@ -175,18 +176,18 @@ function App() {
           }
         }
         
-        if (responseError) {
-          setShowGraph(false);
-          document.getElementById("resultBox").value = invalidResponse;
-        } else {
-          // Rebuild Relations and Joins
-          allRelations = [];
-          allJoins = []
-          jsonIterate(clauseDict);
-          completeRelations();
-          createGraph();
-          setShowGraph(true);
-        }
+        // if (responseError) {
+        //   setShowGraph(false);
+        //   document.getElementById("resultBox").value = invalidResponse;
+        // } else {
+        //   // Rebuild Relations and Joins
+        //   allRelations = [];
+        //   allJoins = []
+        //   jsonIterate(clauseDict);
+        //   completeRelations();
+        //   createGraph();
+        //   setShowGraph(true);
+        // }
       } else {
         window.alert("An error has occurred. Please verify your query and try again.");
         setShowGraph(false);

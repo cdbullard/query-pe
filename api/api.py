@@ -35,5 +35,5 @@ def parseTree():
             phrases = pg.extractPhrases(dictionaryTree)
             resObj['output'] = phrases
             return jsonify(resObj)
-    except:
-        return jsonify(invalidSQLMessage)
+    except Exception as e:
+        return jsonify(e)
