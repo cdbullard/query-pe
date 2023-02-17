@@ -163,6 +163,10 @@ function App() {
         let clauseDict = result.dict;
         let outputJson = result.output;
         let responseError = (String(outputJson).includes("Invalid") || String(outputJson).includes("undefined"));
+        console.log("Request: " + request);
+        console.log("Request inputQuery: " + request.inputQuery);
+        console.log("Request path: " + request.path);
+        console.log("JSON Request: " + JSON.stringify(request));
         console.log(result);
         console.log(result.message);
         console.log(result.state);
