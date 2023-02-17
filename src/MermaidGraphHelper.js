@@ -6,11 +6,11 @@ function MermaidGraph({ graphDefinition }) {
 
   useEffect(() => {
     // Re-render graph on initialization or graph definition change
-    mermaid.render('graph', graphDefinition, (svg) => {
+    mermaid.render("graph", graphDefinition, (svg) => {
       if (graphRef.current) {
         graphRef.current.innerHTML = svg;
-        // Remove the 'data-processed' attribute to force re-render
-        graphRef.current.removeAttribute('data-processed');
+        // Remove the data-processed attribute to force re-render
+        graphRef.current.removeAttribute("data-processed");
       }
     });
   }, [graphDefinition]);

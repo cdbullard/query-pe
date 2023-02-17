@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState } from 'react';
 import Switch from 'react-switch';
 import Popup from 'reactjs-popup';
 import Relation from './Relation';
@@ -17,7 +17,7 @@ function App() {
   of parsing English meaning out of Structured Query Language (SQL) statements. \
   The motivator for this tool is to make database queries more understandable by non-technical users and \
   users who are beginning their data analytics or software development journeys.";
-  const invalidResponse = "Invalid SQL Entry. Please make sure your query is in PostgreSQL format.";
+  const invalidResponse = "Invalid or unsupported SQL statement. Please make sure your query is in PostgreSQL format.";
   let allRelations = [];
   let allJoins = [];
   let divCounter = 0;
