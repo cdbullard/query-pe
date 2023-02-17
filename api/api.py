@@ -19,7 +19,10 @@ def parseTree():
     tempVar = 0
     try:
         tempVar = 1
-        data = json.loads(request.data)
+        try:
+            data = json.loads(request.data)
+        except:
+            data = request.data
         tempVar = 2
         parseTree = p.parse_sql_json(data['inputQuery'])
         tempVar = 3
@@ -47,4 +50,5 @@ def parseTree():
         exceptionRes = {}
         exceptionRes['state'] = tempVar
         exceptionRes['message'] = str(e)
+        exceptionRes['req'] = request.data
         return jsonify(str(exceptionRes))

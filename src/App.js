@@ -180,7 +180,7 @@ function App() {
         
         if (responseError) {
           setShowGraph(false);
-          document.getElementById("resultBox").value = invalidResponse;
+          document.getElementById("resultBox").value = result;
         } else {
           // Rebuild Relations and Joins
           allRelations = [];
