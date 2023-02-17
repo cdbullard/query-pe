@@ -52,7 +52,7 @@ function App() {
     let url;
     switch(process.env.NODE_ENV) {
       case "production":
-        url = "https://query-pe.dev";
+        url = "https://qpe.onrender.com";
         break;
       case "development":
       default:
