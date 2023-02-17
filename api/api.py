@@ -36,4 +36,4 @@ def parseTree():
             resObj['output'] = phrases
             return jsonify(resObj)
     except Exception as e:
-        return jsonify(e)
+        return jsonify(str(e))
