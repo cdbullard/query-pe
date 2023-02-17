@@ -4,7 +4,6 @@ from flask import Flask, request, jsonify
 from pglast import parser as p
 import queryParser as qp
 import phraseGenerator as pg
-import mediator as md
 
 app = Flask(__name__)
 
@@ -32,7 +31,6 @@ def parseTree():
         # Path for Parsed Results
         if data['path'] == 2:
             phrases = pg.extractPhrases(dictionaryTree)
-            intermediary = md.extractRelations(dictionaryTree)
             resObj['output'] = phrases
             return jsonify(resObj)
     except:
