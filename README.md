@@ -38,3 +38,49 @@ npm install
 3. In the second window, run the command `yarn start`. This will begin your frontend instance.
 4. A browser window should appear, but if it does not open one and navigate to `localhost:3000`
 5. You should be greeted with the landing page and can now interact with the application.
+
+## API Documentation
+
+Feel free to send a POST request to the API endpoint using your web application, Postman, or similar API handling service. The API endpoint is located at `https://qpe.onrender.com/parse` and the payload you send should be in JSON format following the below convention:
+
+```
+{
+    "inputQuery": "SELECT 1",
+    "path": 1
+}
+```
+
+Where `inputQuery` is your SQL statement, and `path` is the result you would like to receive (`1` for the JSON abstract syntax tree, `2` for the English paraphrases). The return expected from the above request is:
+
+```
+{
+    "dict": {
+        "Distinct": false,
+        "From": {
+            "joinvalue": [],
+            "relname": []
+        },
+        "Group": {
+            "groups": []
+        },
+        "Having": {
+            "conditions": []
+        },
+        "Limit": "Unlimited results",
+        "Select": {
+            "targets": [
+                [
+                    "VALUE",
+                    "1"
+                ]
+            ]
+        },
+        "Where": {
+            "conditions": []
+        }
+    },
+    "output": "A total of 0 tables were used in this query.\n\nThe following values were included in the result set: 1.\n\nThe number of returned results was unlimited."
+}
+```
+
+`dict` will be returned in both paths `1` and `2` and contains a simplified dictionary of values representing the relations, projections, and other attributes. `output` will return either the JSON abstract parse tree with new line indicators for formatting purposes (when `path = 1`) or the English paraphrases (when `path = 2`).
