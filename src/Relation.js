@@ -1,5 +1,6 @@
 class Relation {
-    constructor(name, alias) {
+    constructor(name, alias, id) {
+        this.id = id;
         this.name = name;
         this.alias = alias;
         this.attributes = [];

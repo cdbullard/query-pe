@@ -63,18 +63,19 @@ function App() {
   }
 
   const jsonIterate = (obj) => {
+    let i = 1000;
+
     Object.keys(obj).forEach(key => {
       if (key == "relname") {
         Object.values(obj[key]).forEach(value => {
           if (!allRelations.find(el => el.name === value[1])) {
-            allRelations.push(new Relation(value[1], value[0]));
+            allRelations.push(new Relation(value[1], value[0], ++i));
           }
         });
       } else if (key == "joinvalue") {
-        Object.values(obj[key]).forEach(value => {
+        Object.values(obj[key]).forEach(function (value, index) {
           let curSize = value.length - 1;
-          let curJoin = new Join(value[0]);
-          allJoins.push(curJoin);
+          let curJoin = new Join(index, value[0], (value[1] + "." + value[2] + " " + value[0] + " " + value[3] + "." + value[4]));
 
           Object.values(value).forEach((note, index) => {
             if (index === curSize) {
@@ -96,10 +97,7 @@ function App() {
             }
           });
 
-          // let leftTable = allRelations.find(el => el.alias == curJoin.left.alias);
-          // let rightTable = allRelations.find(el => el.alias == curJoin.right.alias);
-          // leftTable.joined = true;
-          // rightTable.joined = true;
+          allJoins.push(curJoin);
         });
       } else if (key == "targets") {
         Object.values(obj[key]).forEach(value => {
@@ -123,6 +121,10 @@ function App() {
   // Handle if a table originally visited as a left table appears again in another table using a different attribute
   const completeRelations = () => {
     let visited = [];
+    Object.keys(allJoins).forEach(key => {
+      allJoins[key].left.joined = true;
+      allJoins[key].right.joined = true;
+    });
 
     Object.keys(allJoins).forEach(key => {
       let curLeftRelation = allRelations.find(el => el.alias === allJoins[key].left.alias);
@@ -130,10 +132,12 @@ function App() {
 
       if (curLeftRelation && !(curLeftRelation in visited)) {
         curLeftRelation.attributes.concat(allJoins[key].left.attributes);
+        curLeftRelation.joined = allJoins[key].left.joined;
         allJoins[key].left = curLeftRelation;
       }
       if (curRightRelation && !(curRightRelation in visited)) {
         curRightRelation.attributes.concat(allJoins[key].right.attributes);
+        curRightRelation.joined = allJoins[key].right.joined;
         allJoins[key].right = curRightRelation;
       }
     });
@@ -141,24 +145,50 @@ function App() {
 
   const createGraph = () => {
     let graphBuilder = ``;
+    let visitedJoins = [];
 
     Object.keys(allRelations).forEach(key => {
       if (allRelations[key].joined) {
-        let relatedJoin = allJoins.find(el => el.left.name === allRelations[key].name || el.right.name === allRelations[key].name);
-        let matchedRelation = relatedJoin.left.name === allRelations[key].name ? relatedJoin.right.name : relatedJoin.left.name;
-        graphBuilder += `${allRelations[key].name}==>${relatedJoin.joinType};\n${matchedRelation}==>${relatedJoin.joinType};\n`
+        let relatedJoins = allJoins.filter(el => el.left.name === allRelations[key].name || el.right.name === allRelations[key].name);
+        Object.keys(relatedJoins).forEach(join => {
+          let firstRelation = relatedJoins[join].left.name === allRelations[key].name ? relatedJoins[join].left : relatedJoins[join].right;
+          let secondRelation = relatedJoins[join].left.name === firstRelation.name ? relatedJoins[join].right : relatedJoins[join].left;
+
+          if (firstRelation && secondRelation && !(relatedJoins[join].id in visitedJoins)) {
+            let joinID = relatedJoins[join].id;
+            let firstID = firstRelation.id;
+            let secondID = secondRelation.id;
+            graphBuilder += `id${firstID}[(${"\"" + firstRelation.name + " (" + firstRelation.alias + ")\""})]:::relation --> id${joinID}([${relatedJoins[join].symbol}]):::join;\n` +
+                            `id${secondID}[(${"\"" + secondRelation.name + " (" + secondRelation.alias + ")\""})]:::relation --> id${joinID}([${relatedJoins[join].symbol}]):::join;\n`;
+            visitedJoins.push(relatedJoins[join].id);
+            Object.keys(firstRelation.projections).forEach(p => {
+              let proj = firstRelation.projections[p];
+              graphBuilder += `id${joinID}([${relatedJoins[join].symbol}]):::join -.-> id${proj}{{${firstRelation.alias + "." + proj}}}:::projection;\n`;
+            });
+            Object.keys(secondRelation.projections).forEach(p => {
+              let proj = secondRelation.projections[p];
+              graphBuilder += `id${joinID}([${relatedJoins[join].symbol}]):::join -.-> id${proj}{{${secondRelation.alias + "." + proj}}}:::projection;\n`;
+            });
+          }
+        });
       } else {
         Object.keys(allRelations[key].projections).forEach(select => {
-          graphBuilder += `${allRelations[key].name}==>${allRelations[key].projections[select]};\n`;
+          let proj = allRelations[key].projections[select];
+          let id = allRelations[key].id;
+          graphBuilder += `id${id}[(${allRelations[key].name})]:::relation --> id${proj}{{${allRelations[key].projections[select]}}}:::projection;\n`;
         });
       }
     });
+
+    graphBuilder += `classDef relation fill:#DA627D;\n` + 
+      `classDef join fill:#FFA5AB;\n` + 
+      `classDef projection fill:#F9DBBD;`;
   
     let graphEnd = `
         
     `;
 
-    setDiagram(`graph BT;` + `\n` + graphBuilder + graphEnd);
+    setDiagram(`flowchart BT;` + `\n` + graphBuilder + graphEnd);
   }
 
   const handleParseRequest = async (e) => {
