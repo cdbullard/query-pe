@@ -24,7 +24,12 @@ source venv/bin/activate
 # Install python dependencies
 pip install -r requirements.txt
 
-# Deactivate environment
+# If you encountered an error referencing 'python setup.py egg_info', uncomment 
+# and run the below command inside your virtual environment. Then, try to install 
+# the python dependencies again.
+# pip install --upgrade setuptools
+
+# Deactivate virtual environment
 deactivate
 
 # Install npm dependencies
