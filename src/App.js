@@ -14,6 +14,7 @@ function App() {
   const [diagram, setDiagram] = useState(`graph LR\nA-->B; Example;\n\n`);
   const [showGraph, setShowGraph] = useState(false);
   const [showModal, setShowModal] = useState(false);
+  const [showProgressBar, setShowProgressBar] = useState(false);
   const aboutStatement = "Query Purpose Extractor (QPE) is an undertaking to demonstrate the potential benefit \
   of parsing English meaning out of Structured Query Language (SQL) statements. \
   The motivator for this tool is to make database queries more understandable by non-technical users and \
@@ -193,6 +194,7 @@ function App() {
 
   const handleParseRequest = async (e) => {
     e.preventDefault();
+    setShowProgressBar(true);
     let route = getBaseUrl() + "/parse";
     let request = {};
     request.inputQuery = inputQuery;
@@ -203,6 +205,7 @@ function App() {
         body: JSON.stringify(request),
       });
       let result = await res.json();
+      setShowProgressBar(false);
       if (res.status === 200) {
         let clauseDict = result.dict;
         let outputJson = result.output;
@@ -320,6 +323,9 @@ function App() {
                       placeholder="Results Will Appear Here"
                       rows={12}
                       />
+                </div>
+                <div className="control">
+                  {showProgressBar ? <progress className="progress is-small is-primary" max="100">15%</progress> : null}
                 </div>
               </div>
             </div>
