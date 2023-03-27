@@ -18,7 +18,7 @@ QPE is an application built with the goal of making Structured Query Language (S
 # Create a new virtual environment
 python3 -m venv venv
 
-# Activate virutal environment
+# Activate virtual environment
 source venv/bin/activate
 
 # Install python dependencies
